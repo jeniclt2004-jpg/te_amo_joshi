@@ -23,6 +23,7 @@
             align-items: center;
             padding: 20px;
             overflow-x: hidden;
+            cursor: pointer;
         }
 
         .container {
@@ -35,6 +36,7 @@
             padding: 30px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             margin-bottom: 30px;
+            cursor: default;
         }
 
         h1, h2 {
@@ -193,11 +195,12 @@
             animation: flotar 4s linear infinite;
             z-index: 999;
             user-select: none;
+            pointer-events: none;
         }
 
         @keyframes flotar {
-            0% { transform: translateY(100vh) scale(0.5); opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+            0% { transform: translateY(0) scale(0.5); opacity: 1; }
+            100% { transform: translateY(-150px) scale(1.3); opacity: 0; }
         }
     </style>
 </head>
@@ -208,10 +211,10 @@
         
         <!-- CARTA -->
         <div class="carta-box">
-            <p>Mi amor, eres lo más bonito que me ha pasado. Cada momento a tu lado compartiendo nuestra carrera, risas y proyectos es sumamente especial. Hice esta pequeña sorpresa para recordarte cuánto te amo y lo feliz que me haces todos los días. Eres mi equipo perfecto. Te amo con todo mi corazón. 💕</p>
+            <p>Del uno al 10 te amo un millón. Siempre había sentido que no llegaría a conocer a alguien con quien realmente querría quedarme. Tu enorme inteligencia, tu personalidad que a veces me enojas... te amo. Solo sé que por muchas cosas que pasamos, pasemos, quiero pasarlas contigo. Veo tus ojos y mi corazón se acelera mucho, solo puedo dormir bien cuando estás cerca de mí, y creo que podría pasar toda mi vida besándote. 💕</p>
         </div>
 
-        <!-- CONTADOR DE TIEMPO (Desde el 7 de marzo a las 16:51) -->
+        <!-- CONTADOR DE TIEMPO -->
         <div class="contador-container">
             <h2>Nuestro Tiempo Juntos</h2>
             <div class="contador-grid">
@@ -222,23 +225,28 @@
             </div>
         </div>
 
-        <!-- MUSEO DE FOTOS (Con sus fotos reales) -->
+        <!-- MUSEO DE FOTOS -->
         <div class="museo-container">
             <h2>Nuestro Museo de Recuerdos</h2>
             
             <div class="marco-foto">
-                <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=600&auto=format&fit=crop" alt="Juntos">
-                <p>Nuestros momentos favoritos ✨</p>
+                <img src="foto1.jpeg" alt="Nuestra primera foto siendo novios">
+                <p>Nuestra primera foto siendo novios 💖</p>
             </div>
 
             <div class="marco-foto">
-                <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?q=80&w=600&auto=format&fit=crop" alt="Amor">
-                <p>Caminando juntos siempre 🌹</p>
+                <img src="foto2.jpeg" alt="Tu cara linda que hace mi corazon latir">
+                <p>Tu cara linda que hace mi corazón latir ✨</p>
             </div>
 
             <div class="marco-foto">
-                <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?q=80&w=600&auto=format&fit=crop" alt="Sonrisa">
-                <p>Tu sonrisa que lo ilumina todo 💖</p>
+                <img src="foto3.jpeg" alt="Primer san valentin">
+                <p>Primer San Valentín 🌹</p>
+            </div>
+
+            <div class="marco-foto">
+                <img src="foto4.jpeg" alt="Tu y yopi">
+                <p>Tú y Yopi (Te amo) 🐾💕</p>
             </div>
         </div>
 
@@ -253,7 +261,7 @@
     </div>
 
     <script>
-        // --- CONTADOR DE TIEMPO (Configurado para el 7 de marzo a las 16:51) ---
+        // --- CONTADOR DE TIEMPO ---
         const fechaInicio = new Date("2026-03-07T16:51:00");
 
         function actualizarContador() {
@@ -274,6 +282,18 @@
         }
         setInterval(actualizarContador, 1000);
         actualizarContador();
+
+        // --- EFECTO DE CORAZONES AL HACER CLIC ---
+        window.addEventListener('click', (e) => {
+            const corazon = document.createElement('div');
+            corazon.classList.add('corazon-flotante');
+            corazon.innerHTML = '❤️';
+            corazon.style.left = (e.clientX - 10) + 'px';
+            corazon.style.top = (e.clientY - 10) + 'px';
+            corazon.style.fontSize = (Math.random() * 15 + 15) + 'px';
+            document.body.appendChild(corazon);
+            setTimeout(() => corazon.remove(), 4000);
+        });
 
         // --- MINIJUEGO DE MEMORIA ---
         const simbolos = ['💖', '💖', '🌹', '🌹', '✨', '✨', '🍫', '🍫'];
@@ -299,7 +319,10 @@
                 tarjeta.classList.add("tarjeta");
                 tarjeta.dataset.simbolo = simbolo;
                 tarjeta.dataset.index = index;
-                tarjeta.addEventListener("click", voltearTarjeta);
+                tarjeta.addEventListener("click", (e) => {
+                    e.stopPropagation();
+                    voltearTarjeta.call(tarjeta);
+                });
                 tablero.appendChild(tarjeta);
             });
         }
@@ -330,7 +353,7 @@
 
                 if (parejasEncontradas === simbolos.length / 2) {
                     document.getElementById("mensaje-victoria").innerText = "¡Sabía que ganarías, así como ganaste mi corazón! 🥰💖";
-                    lanzarCorazones();
+                    lanzarLluviaCorazones();
                 }
             } else {
                 bloqueoTablero = true;
@@ -352,20 +375,5 @@
 
         iniciarJuegoMemoria();
 
-        // Efecto de corazones flotantes
-        function lanzarCorazones() {
-            for (let i = 0; i < 20; i++) {
-                setTimeout(() => {
-                    const corazon = document.createElement('div');
-                    corazon.classList.add('corazon-flotante');
-                    corazon.innerHTML = '❤️';
-                    corazon.style.left = Math.random() * 100 + 'vw';
-                    corazon.style.fontSize = (Math.random() * 20 + 15) + 'px';
-                    document.body.appendChild(corazon);
-                    setTimeout(() => corazon.remove(), 4000);
-                }, i * 150);
-            }
-        }
-    </script>
-</body>
-</html>
+        function lanzarLluviaCorazones() {
+            for (let i = 0; i <
